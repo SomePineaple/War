@@ -8,7 +8,7 @@
 
 War::War(){
 	deck = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(deck.begin(), deck.end(), std::default_random_engine(seed));
 	int deckLen = (int)deck.size() / 2;
 	for(int i = 0; i < deckLen; i++){
@@ -65,7 +65,7 @@ int War::war(int depth){
 		return 1;
 	}
 	if((int)hand1.size() < depth + 5){
-		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+		auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 		std::shuffle(hand1Winnings.begin(), hand1Winnings.end(), std::default_random_engine(seed));
 		for(int card : hand1Winnings){
 			hand1.push_back(card);
@@ -73,7 +73,7 @@ int War::war(int depth){
 		hand1Winnings = {};
 	}
 	if((int)hand2.size() < depth + 5){
-		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+		auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 		std::shuffle(hand2Winnings.begin(), hand2Winnings.end(), std::default_random_engine(seed));
 		for(int card : hand2Winnings){
 			hand2.push_back(card);
@@ -130,4 +130,21 @@ int War::war(int depth){
 		return war(depth + 4);
 	}
 	return 0;
+}
+
+void War::reset(){
+	deck = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,10,11,12,13};
+	unsigned long seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::shuffle(deck.begin(), deck.end(), std::default_random_engine(seed));
+	int deckLen = (int)deck.size() / 2;
+	hand1 = {};
+	hand2 = {};
+	hand1Winnings = {};
+	hand2Winnings = {};
+	for(int i = 0; i < deckLen; i++){
+		hand1.push_back(deck.back());
+		deck.pop_back();
+		hand2.push_back(deck.back());
+		deck.pop_back();
+	}
 }

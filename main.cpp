@@ -1,26 +1,14 @@
 #include <chrono>
 #include <iostream>
+#include <unistd.h>
 
 #include "war.h"
 
 using namespace std;
 using namespace std::chrono;
 
-int playGame(){
-	int rounds = 0;
-	War *game = new War();
-	while (true){
-		rounds++;
-		int gameStatus = game->playRound();
-		if(gameStatus != 0){
-			break;
-		}
-	}
-	delete game;
-	return rounds;
-}
-
 int main (){
+	War *game = new War();
 	unsigned long int games;
 	int max = -9999;
 	int min = 9999;
@@ -29,7 +17,10 @@ int main (){
 	cin >> games;
 	auto start = high_resolution_clock::now();
 	for(unsigned long int i = 0; i < games; i++){
-		int result = playGame();
+		int result = 0;
+		while (game->playRound() == 0){
+			result++;
+		}
 		cout << i + 1 << " " << result << endl;
 		total += result;
 		if(result > max){
@@ -37,6 +28,7 @@ int main (){
 		} else if(result < min){
 			min = result;
 		}
+		game->reset();
 	}
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(stop - start);

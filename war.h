@@ -7,6 +7,7 @@ class War{
 public:
 	War();
 	int playRound();
+	void reset();
 private:
 	int war(int depth = 0);
 	std::vector<int> deck;
